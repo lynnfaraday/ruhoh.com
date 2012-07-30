@@ -211,11 +211,35 @@ accessible by the mustache templating code.
 
 ## Pagination
 
-The compiler will automatically build paged index files - breaking up your blog into N posts per page.  The index files are located in sub-folders: **/index/{page#}/index.html**.    
+The compiler will automatically build paged index files - breaking up your blog into a pre-configured number of posts per page.  You can configure the page used as the base template for the paginated files.  Typically you'll want this to be your front page (index.html by default), but you can use any page.  This page will essentially be cloned multiple times - each time with *per_page* posts in the **page.pagination** payload.  
 
-You can configure the page used as the base template for the paginated files (index.html by default).  This page will essentially be cloned multiple times - each time with different post data in the **page.pagination** payload.
+For example, if you have 10 total posts and 4 posts per page, your pagination would look like this:
 
+   index.html  (base page, contains posts 1-4)
+   /index/1/index.html   (1st index page, duplicate of base page)
+   /index/2/index.html   (2nd index page, contains posts 5-8)
+   /index/3/index.html   (3rd index page, contains posts 9-10)
+
+Pagination data includes some top-level information:
+
+   total_pages:  Number of pagination index pages
+   total_posts:  Number of posts
+   per_page:     The configured number of posts per index page
+   index_pages:  Array containing the data for each index page
+
+Each index page contains the following data:
+
+   page_number:    User-friendly display number for the page
+   posts:          Array of post ids for this page
+   prev:           Array of up to 3 previous index pages (each containing "page_number" and "url")
+   next:           Array of up to 3 next index pages (each containing "page_number" and "url")
+   prev_truncated: If there are more than 3 previous pages, this is the URL of the 4th
+   next_truncated: If there are more than 3 next pages, this is the URL of the 4th
+      Note:  prev_truncated and next_truncated enable you to show a fast-forward arrow/button
+   
 ### Example Usage
+
+In the main site config file:
 
     # config.yml
     ---
@@ -223,6 +247,7 @@ You can configure the page used as the base template for the paginated files (in
       base_page : index.html
       per_page : 10
 
+In the pagination base page:
 
     # index.html:
     ---
