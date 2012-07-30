@@ -209,6 +209,43 @@ In your templates:
 These data objects are passed into the Templating system as the "payload" making them directly
 accessible by the mustache templating code.
 
+## Pagination
+
+The compiler will automatically build paged index files - breaking up your blog into N posts per page.  The index files are located in sub-folders: **/index/{page#}/index.html**.    
+
+You can configure the page used as the base template for the paginated files (index.html by default).  This page will essentially be cloned multiple times - each time with different post data in the **page.pagination** payload.
+
+### Example Usage
+
+    # config.yml
+    ---
+    pagination :
+      base_page : index.html
+      per_page : 10
+
+
+    # index.html:
+    ---
+    {{# page.pagination.posts?to_posts}}
+    	<br/><br/>
+	    <div class="page-header">
+	    <h1>{{ title }} {{# tagline }} <small>{{ . }}</small>{{/ tagline }}</h1>
+	    </div>
+	    {{{summary}}}
+    {{/ page.pagination.posts?to_posts}}
+
+	{{# page.pagination.prev}}
+	    <a href="{{url}}">{{page_number}}</a>
+	{{/ page.pagination.prev}}
+
+	{{page.pagination.page_number}}
+
+	{{# page.pagination.next}}
+	    <a href="{{url}}">{{page_number}}</a>
+	{{/ page.pagination.next}}
+
+
+
 ## Full Payload
 
 The full payload object passed into the templating system is actually much bigger than just the objects we've covered.
@@ -233,6 +270,11 @@ Think of these main keys as the **top-level endpoints** available to you in must
           "categories" => {
             "category1" => {...},
             "category2" => {...},
+          },
+		  "pagination"=> {
+            "total_pages" => 11,
+            ...
+            "index_pages" => [...]
           }
         }
       },

@@ -144,6 +144,15 @@ Disable comments for individual pages/posts by specifying `comments: false` in t
 
 Internally, the value of "comments" will be cast to a String. So you must specify exactly the value `false` or `"false"` for this to work.
 
+# Comments Count
+
+Most of the built-in comment providers support only one comment block per page.  If you're implementing an index page with multiple posts, you may wish to use the Comments Count widget.  This will display a link like "2 Comments" that will take you to the main post page's comment section.
+
+## Configure Comments Count
+
+The comments count shares the configuration information from the comments widget.  The only thing you need to specify is which layout to use.
+
+    layout : disqus
 
 # Analytics
 
